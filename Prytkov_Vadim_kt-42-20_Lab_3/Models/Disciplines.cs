@@ -8,10 +8,6 @@
 
         public int TeachId { get; set; }
 
-        public Teachers Teacher { get; set; }
-
         public int LoadId { get; set; }
-
-        public LoadPerHour LoadArea { get; set; }
     }
 }

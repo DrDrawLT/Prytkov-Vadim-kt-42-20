@@ -12,7 +12,5 @@
 
         public int TeachId { get; set; }
 
-        public Teachers Deputy { get; set; }
-
     }
 }

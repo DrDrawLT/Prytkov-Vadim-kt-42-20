@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Prytkov_Vadim_kt_42_20_Lab_3.DB;
+using static Prytkov_Vadim_kt_42_20_Lab_3.ServiceExtensions.ServiceExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PrepodDBContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddServices();
 
 var app = builder.Build();
 

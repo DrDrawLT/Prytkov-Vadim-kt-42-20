@@ -36,58 +36,20 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.DB.Config
                 .HasColumnType(ColumnType.Int)
                 .HasComment("Идентификатор преподавателя");
 
-            builder.Property(p => p.DepId)
-                .IsRequired()
-                .HasColumnName("c_load_dep_id")
-                .HasColumnType(ColumnType.Int)
-                .HasComment("Идентификатор кафедры");
-
             builder.Property(p => p.DiscipId)
                 .IsRequired()
                 .HasColumnName("c_load_dis_id")
                 .HasColumnType(ColumnType.Int)
                 .HasComment("Идентификатор дисциплины");
 
+            builder.Property(p => p.DepartId)
+                .IsRequired()
+                .HasColumnName("c_load_depart_id")
+                .HasColumnType(ColumnType.Int)
+                .HasComment("Идентификатор кафедры");
+
             //---------------
 
-            builder.ToTable(TableName)
-                .HasOne(p => p.Teacher)
-                .WithMany()
-                .HasForeignKey(p => p.TeachId)
-                .HasConstraintName("fk_f1_teach_id")
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.ToTable(TableName)
-                .HasIndex(p => p.TeachId, $"idx_{TableName}_fk_f1_teach_id");
-
-            builder.Navigation(p => p.Teacher)
-                .AutoInclude();
-            //
-            builder.ToTable(TableName)
-                .HasOne(p => p.Department)
-                .WithMany()
-                .HasForeignKey(p => p.DepId)
-                .HasConstraintName("fk_f1_dep_id")
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.ToTable(TableName)
-                .HasIndex(p => p.DepId, $"idx_{TableName}_fk_f1_dep_id");
-
-            builder.Navigation(p => p.Department)
-                .AutoInclude();
-            //
-            builder.ToTable(TableName)
-                .HasOne(p => p.Discipline)
-                .WithMany()
-                .HasForeignKey(p => p.DiscipId)
-                .HasConstraintName("fk_f_dis_id")
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.ToTable(TableName)
-                .HasIndex(p => p.DiscipId, $"idx_{TableName}_fk_f_dis_id");
-
-            builder.Navigation(p => p.Discipline)
-                .AutoInclude();
         }
     }
 }

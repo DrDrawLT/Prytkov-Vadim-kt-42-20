@@ -72,8 +72,7 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.DB.Config
             builder.ToTable(TableName)
                 .HasIndex(p => p.DepId, $"idx_{TableName}_fk_f_dep_id");
 
-            builder.Navigation(p => p.Depart)
-                .AutoInclude();
+            builder.Navigation(p => p.Depart);
             //
             builder.ToTable(TableName)
                 .HasOne(p => p.AcademicDegree)
@@ -85,8 +84,7 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.DB.Config
             builder.ToTable(TableName)
                 .HasIndex(p => p.AcDegId, $"idx_{TableName}_fk_f_acdeg_id");
 
-            builder.Navigation(p => p.AcademicDegree)
-                .AutoInclude();
+            builder.Navigation(p=>p.AcademicDegree);
             //
             builder.ToTable(TableName)
                 .HasOne(p => p.Position)
@@ -98,8 +96,7 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.DB.Config
             builder.ToTable(TableName)
                 .HasIndex(p => p.PosId, $"idx_{TableName}_fk_f_posit_id");
 
-            builder.Navigation(p => p.Position)
-                .AutoInclude();
+            builder.Navigation(p => p.Position);
         }
     }
 }

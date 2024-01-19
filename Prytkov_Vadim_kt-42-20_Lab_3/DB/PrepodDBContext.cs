@@ -15,8 +15,10 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new DepartmentsConfig());
-            modelBuilder.ApplyConfiguration(new DisciplinesConfig());
+            modelBuilder.ApplyConfiguration(new ADConfig());
+            modelBuilder.ApplyConfiguration(new DepartConfig());
+            modelBuilder.ApplyConfiguration(new DisciplineConfig());
+            modelBuilder.ApplyConfiguration(new PositionConfig());
             modelBuilder.ApplyConfiguration(new LoadConfig());
             modelBuilder.ApplyConfiguration(new TeachersConfig());
         }

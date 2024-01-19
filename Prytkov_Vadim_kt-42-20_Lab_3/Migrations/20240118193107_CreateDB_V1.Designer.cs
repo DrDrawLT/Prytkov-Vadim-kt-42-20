@@ -12,8 +12,8 @@ using Prytkov_Vadim_kt_42_20_Lab_3.DB;
 namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
 {
     [DbContext(typeof(PrepodDBContext))]
-    [Migration("20240117125344_CreateDB")]
-    partial class CreateDB
+    [Migration("20240118193107_CreateDB_V1")]
+    partial class CreateDB_V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,15 +29,21 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ad_id")
+                        .HasComment("Идентификатор должности");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_ad_name")
+                        .HasComment("Имя");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_cd_academicDegrees_ad_id");
 
                     b.ToTable("AcademicDegrees");
                 });
@@ -54,32 +60,30 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
 
                     b.Property<int>("CountTeach")
                         .HasColumnType("int")
-                        .HasColumnName("c_dep_count")
+                        .HasColumnName("c_depart_count")
                         .HasComment("Кол-во преподавателей");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime")
-                        .HasColumnName("c_dep_date")
-                        .HasComment("Дата создания");
+                        .HasColumnName("c_depart_date")
+                        .HasComment("Дата создания кафедры");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar")
-                        .HasColumnName("c_dep_name")
-                        .HasComment("Наименование кафедры");
+                        .HasColumnName("c_depart_name")
+                        .HasComment("Имя");
 
                     b.Property<int>("TeachId")
                         .HasColumnType("int")
-                        .HasColumnName("c_dep_teach_id")
-                        .HasComment("Идентификатор заместителя");
+                        .HasColumnName("c_depart_teach")
+                        .HasComment("Заместитель кафедры");
 
                     b.HasKey("Id")
-                        .HasName("pk_cd_departments_department_id");
+                        .HasName("pk_cd_derts_depart_id");
 
-                    b.HasIndex(new[] { "TeachId" }, "idx_cd_departments_fk_f2_teach_id");
-
-                    b.ToTable("cd_departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.Disciplines", b =>
@@ -87,36 +91,32 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("discipline_id")
+                        .HasColumnName("discip_id")
                         .HasComment("Идентификатор дисциплины");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("LoadId")
                         .HasColumnType("int")
-                        .HasColumnName("c_dis_load_id")
-                        .HasComment("Идентификатор нагрузки");
+                        .HasColumnName("c_discip_load")
+                        .HasComment("Id нагрузки");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar")
-                        .HasColumnName("c_dis_name")
+                        .HasColumnName("c_discip_name")
                         .HasComment("Имя");
 
                     b.Property<int>("TeachId")
                         .HasColumnType("int")
-                        .HasColumnName("c_dis_teach_id")
-                        .HasComment("Идентификатор преподавателя");
+                        .HasColumnName("c_discip_teach")
+                        .HasComment("Id преподавателя");
 
                     b.HasKey("Id")
-                        .HasName("pk_cd_disciplines_discipline_id");
+                        .HasName("pk_cd_disciplines_discip_id");
 
-                    b.HasIndex(new[] { "LoadId" }, "idx_cd_disciplines_fk_f_load_id");
-
-                    b.HasIndex(new[] { "TeachId" }, "idx_cd_disciplines_fk_f_teach_id");
-
-                    b.ToTable("cd_disciplines", (string)null);
+                    b.ToTable("Disciplines");
                 });
 
             modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.LoadPerHour", b =>
@@ -129,15 +129,21 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DepId")
+                    b.Property<int>("DepartId")
                         .HasColumnType("int")
-                        .HasColumnName("c_load_dep_id")
+                        .HasColumnName("c_load_depart_id")
                         .HasComment("Идентификатор кафедры");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DiscipId")
                         .HasColumnType("int")
                         .HasColumnName("c_load_dis_id")
                         .HasComment("Идентификатор дисциплины");
+
+                    b.Property<int>("DisciplineId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Hours")
                         .HasColumnType("int")
@@ -149,31 +155,40 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
                         .HasColumnName("c_load_teach_id")
                         .HasComment("Идентификатор преподавателя");
 
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id")
                         .HasName("pk_cd_load_load_id");
 
-                    b.HasIndex(new[] { "DepId" }, "idx_cd_load_fk_f1_dep_id");
+                    b.HasIndex("DepartmentId");
 
-                    b.HasIndex(new[] { "TeachId" }, "idx_cd_load_fk_f1_teach_id");
+                    b.HasIndex("DisciplineId");
 
-                    b.HasIndex(new[] { "DiscipId" }, "idx_cd_load_fk_f_dis_id");
+                    b.HasIndex("TeacherId");
 
-                    b.ToTable("cd_load", (string)null);
+                    b.ToTable("LoadPerHour");
                 });
 
             modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.Positions", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("position_id")
+                        .HasComment("Идентификатор должности");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
+                        .HasColumnName("c_position_name")
+                        .HasComment("Имя");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_cd_positions_position_id");
 
                     b.ToTable("Positions");
                 });
@@ -236,61 +251,25 @@ namespace Prytkov_Vadim_kt_42_20_Lab_3.Migrations
                     b.ToTable("cd_teachers", (string)null);
                 });
 
-            modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.Departments", b =>
-                {
-                    b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.Teachers", "Deputy")
-                        .WithMany()
-                        .HasForeignKey("TeachId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_f2_teach_id");
-
-                    b.Navigation("Deputy");
-                });
-
-            modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.Disciplines", b =>
-                {
-                    b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.LoadPerHour", "LoadArea")
-                        .WithMany()
-                        .HasForeignKey("LoadId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_f_load_id");
-
-                    b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.Teachers", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_f_teach_id");
-
-                    b.Navigation("LoadArea");
-
-                    b.Navigation("Teacher");
-                });
-
             modelBuilder.Entity("Prytkov_Vadim_kt_42_20_Lab_3.Models.LoadPerHour", b =>
                 {
                     b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.Departments", "Department")
                         .WithMany()
-                        .HasForeignKey("DepId")
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_f1_dep_id");
+                        .IsRequired();
 
                     b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.Disciplines", "Discipline")
                         .WithMany()
-                        .HasForeignKey("DiscipId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_f_dis_id");
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prytkov_Vadim_kt_42_20_Lab_3.Models.Teachers", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeachId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_f1_teach_id");
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Department");
 
